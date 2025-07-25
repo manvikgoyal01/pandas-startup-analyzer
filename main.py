@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime
 import sys
 import os
-import csv
+import warnings
 
 # importing the database file and formatting
 database = pd.read_csv(r"startup_funding_project\startup_funding_data.csv")
@@ -188,6 +188,11 @@ def display_funding_data(database, asc, no_results, arg=0):
         print(f"\nAverage Funding : ")
         output(database, "mean", asc, no_results)
 
+        print("\nMedian Funding : ")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=RuntimeWarning)
+            output(database, "median", asc, no_results, 1)
+
         print(f"\nMaximum Funding :")
         output(database, "max", False, no_results)
 
@@ -267,7 +272,7 @@ def display_funding_overview(database):
                 choice = sorted({str(i) for i in range(1, 7)})
                 break
 
-            choice = sorted(set(choice))
+            choice = sorted(set(choice.split(",")))
             for i in choice:
                 if int(i) not in [j for j in range(1, 7)]:
                     print(f"{i} is not a valid choice")
@@ -332,8 +337,8 @@ def filter(col_name, text_word, filtered=()):
                         f"\nEnter the {text_word} to select, seperated by comma (,) : "
                     ).strip()
                     try:
-                        for i in set(user_input):
-                            filtered = set(user_input).copy()
+                        for i in set(user_input.split(",")):
+                            filtered = set(user_input.split(",")).copy()
                             print(f"\nOnly your selected {text_word} will be shown.")
                             break
                     except Exception as e:
@@ -347,7 +352,7 @@ def filter(col_name, text_word, filtered=()):
                         f"\nEnter the {text_word} to add, seperated by comma (,) : "
                     ).strip()
                     try:
-                        filtered.union(set(user_input))
+                        filtered.union(set(user_input.split(",")))
                         print(f"\nYour selected {text_word} have been added")
                         break
                     except Exception as e:
@@ -361,8 +366,8 @@ def filter(col_name, text_word, filtered=()):
                         "\nEnter the startups to remove, seperated by comma (,)."
                     ).strip()
                     try:
-                        for i in set(user_input):
-                            filtered.difference(user_input)
+                        for i in set(user_input.split(",")):
+                            filtered.difference(set(user_input.split(",")))
                             print(f"\nYour selected {text_word} have been removed")
                             break
                     except Exception as e:
