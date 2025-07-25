@@ -16,7 +16,8 @@ A command-line Python tool for analyzing Indian startup funding data using panda
 - View:
   - Filtered dataset in table form  
   - Top-funded startups  
-  - Sector & sub-sector analysis  
+  - Detailed anaylysis of various sorts, eg : city-wise, sector-wise, investor-wise, etc.
+  - Get stats like mean, median, max, min, total startups of each type in that group, etc.
 
 - Export:
   - Save filtered & sorted data to .csv on user's machine  
